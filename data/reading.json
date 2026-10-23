@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "reader": "Biswajit",
+  "settings": {
+    "yearlyGoal": 12,
+    "timezone": "Asia/Kolkata",
+    "goal": {
+      "startPages": 10,
+      "startMinutes": 15,
+      "weeklyIncrease": 0.10,
+      "daysToLevelUp": 5,
+      "capPages": 50,
+      "capMinutes": 60
+    }
+  },
+  "books": [
+    {
+      "id": "project-hail-mary",
+      "title": "Project Hail Mary",
+      "author": "Andy Weir",
+      "totalChapters": 30,
+      "totalPages": 496,
+      "edition": "Ballantine hardcover, 2021 (30 chapters + epilogue, 496 pp)",
+      "status": "reading",
+      "started": "2026-10-24",
+      "finished": null
+    },
+    {
+      "id": "the-martian",
+      "title": "The Martian",
+      "author": "Andy Weir",
+      "totalPages": 384,
+      "status": "next",
+      "suggested": true,
+      "started": null,
+      "finished": null
+    },
+    {
+      "id": "children-of-time",
+      "title": "Children of Time",
+      "author": "Adrian Tchaikovsky",
+      "totalPages": 600,
+      "status": "next",
+      "suggested": true,
+      "started": null,
+      "finished": null
+    },
+    {
+      "id": "the-three-body-problem",
+      "title": "The Three-Body Problem",
+      "author": "Cixin Liu",
+      "totalPages": 400,
+      "status": "next",
+      "suggested": true,
+      "started": null,
+      "finished": null
+    }
+  ],
+  "log": [
+    {
+      "date": "2026-10-24",
+      "book": "project-hail-mary",
+      "pages": 51,
+      "chapters": 3,
+      "minutes": 0,
+      "note": "Chapters 1-3 done (pp. 3-53). Restarting the habit. Now on chapter 4."
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reading Quest · Biswajit</title>
+<meta name="description" content="A slow-and-steady reading habit tracker with streaks, XP and a goal that grows with you.">
+<meta name="theme-color" content="#0d0c14">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<main class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">Reading Quest</p>
+      <h1 id="hello">Tonight's page is waiting.</h1>
+      <p class="sub" id="tagline">Small pages, every day. The habit does the rest.</p>
+    </div>
+    <div class="level-card" id="levelCard"></div>
+  </header>
+
+  <section class="grid hero">
+    <article class="card today" id="todayCard"></article>
+    <article class="card streak" id="streakCard"></article>
+  </section>
+
+  <section class="card current" id="currentCard"></section>
+
+  <section class="grid two">
+    <article class="card" id="weekCard"></article>
+    <article class="card" id="questCard"></article>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Reading calendar</h2><span class="muted" id="heatSummary"></span></div>
+    <div class="heat-scroll"><div class="heatmap" id="heatmap"></div></div>
+    <div class="legend"><span>less</span><i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i><span>more</span><span class="legend-key"><i class="frozen"></i> freeze used</span></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Badges</h2><span class="muted" id="badgeCount"></span></div>
+    <div class="badges" id="badges"></div>
+  </section>
+
+  <section class="grid two">
+    <article class="card" id="shelfCard"></article>
+    <article class="card" id="nextCard"></article>
+  </section>
+
+  <section class="card" id="logCard"></section>
+
+  <section class="card" id="pendingCard">
+    <div class="card-head"><h2>Quick log <span class="pill amber">pending</span></h2></div>
+    <p class="muted small">Saved only in this browser. It doesn't count until you tell Robin and the log file is updated.</p>
+    <form id="quickForm" class="quick">
+      <label>Pages<input type="number" name="pages" min="0" inputmode="numeric" placeholder="0"></label>
+      <label>Chapters<input type="number" name="chapters" min="0" inputmode="numeric" placeholder="0"></label>
+      <label>Minutes<input type="number" name="minutes" min="0" inputmode="numeric" placeholder="0"></label>
+      <label class="wide">Note<input type="text" name="note" maxlength="140" placeholder="What stuck with you?"></label>
+      <button type="submit">Save pending entry</button>
+    </form>
+    <ul class="pending-list" id="pendingList"></ul>
+  </section>
+
+  <footer class="foot">
+    <p>XP: 1 per page · 15 per chapter · 1 per 2 minutes · +10 when the daily goal is met · +200 per finished book.</p>
+    <p class="muted" id="updated"></p>
+  </footer>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<script src="assets/engine.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
