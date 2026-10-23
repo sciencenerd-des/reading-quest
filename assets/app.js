@@ -72,7 +72,7 @@
       const ticks = cb.totalChapters ? Array.from({ length: cb.totalChapters }, (_, i) =>
         `<i class="${i < done ? "done" : i === done ? "now" : ""}" title="${esc(cap(unit))} ${i + 1}"></i>`).join("") : "";
       $("currentCard").innerHTML = `
-        <div class="card-head"><h2>Now reading</h2><span class="muted small">since ${fmt(cb.started || S.start)}</span></div>
+        <div class="card-head"><h2>Now reading</h2><span class="muted small">${cb.currentRead && cb.currentRead.n > 1 ? `<span class="pill amber">re-read #${cb.currentRead.n}</span> ` : ""}since ${fmt((cb.currentRead || {}).started || cb.started || S.start)}</span></div>
         <div class="book-now">
           ${coverImg(cb, "cover")}
           <div class="book-meta">
@@ -104,7 +104,7 @@
       <p class="muted small">Goal met ${tw.met} of 7 days · best week so far ${S.bestWeekPages} pages · all-time ${S.totals.pages} pages, ${S.totals.chapters} chapters, ${S.totals.minutes} min.</p>`;
 
     // quests
-    const nf = S.finished.length;
+    const nf = S.finishedCount;
     const nextMs = BOOK_MILESTONES.find(m => m > nf) || nf + 25;
     const prevMs = [...BOOK_MILESTONES].reverse().find(m => m <= nf) || 0;
     const yg = S.s.yearlyGoal || 12;
@@ -116,7 +116,7 @@
       <div class="quest">
         <div class="q-top"><span>📘 Next milestone: <b>${plural(nextMs, "book")}</b></span><span class="mono">${nf}/${nextMs}</span></div>
         <div class="bar"><i style="width:${((nf - prevMs) / (nextMs - prevMs) * 100).toFixed(1)}%"></i></div>
-        <p class="muted small">${nf === 0 ? "Finish Project Hail Mary to open the shelf." : `${plural(nextMs - nf, "book")} to go.`}</p>
+        <p class="muted small">${nf === 0 ? `Finish ${esc((S.reading[0] || {}).title || "a book")} to open the shelf.` : `${plural(nextMs - nf, "book")} to go.`}</p>
       </div>
       <div class="quest">
         <div class="q-top"><span>🗓️ ${S.year} challenge: <b>${yg} books</b></span><span class="mono">${S.finishedThisYear}/${yg}</span></div>
@@ -160,7 +160,7 @@
 
     // shelf
     $("shelfCard").innerHTML = `<div class="card-head"><h2>Bookshelf</h2><span class="muted small">${plural(nf, "book")} finished</span></div>
-      ${nf ? `<div class="shelf">${S.finished.map(b => `<figure class="shelf-book" title="${esc(b.title)} · ${esc(b.author)} · finished ${b.finished ? fmt(b.finished, { day: "numeric", month: "short", year: "numeric" }) : ""}">${coverImg(b, "")}</figure>`).join("")}</div><div class="plank"></div>`
+      ${nf ? `<div class="shelf">${S.finished.map(b => `<figure class="shelf-book" title="${esc(b.title)} · ${esc(b.author)} · finished ${fmt(b.lastFinished, { day: "numeric", month: "short", year: "numeric" })}${b.timesFinished > 1 ? ` · read ${b.timesFinished}×` : ""}">${coverImg(b, "")}${b.timesFinished > 1 ? `<span class="times">×${b.timesFinished}</span>` : ""}</figure>`).join("")}</div><div class="plank"></div>`
         : `<div class="shelf empty">${cb ? `<figure class="shelf-book reserved" title="Reserved for ${esc(cb.title)}">${coverImg(cb, "")}<figcaption>reserved</figcaption></figure>` : ""}${Array.from({ length: cb ? 3 : 4 }, () => `<div class="slot"></div>`).join("")}</div><div class="plank"></div><p class="muted small">Empty for now. ${cb ? `The first slot is saved for ${esc(cb.title)}.` : "Your first finished book goes here."}</p>`}`;
 
     // next up
@@ -212,9 +212,20 @@
     renderPending();
   }
 
+  // ---------- tabs (hash routing: #quest / #reviews) ----------
+  function setupTabs() {
+    const show = () => {
+      const tab = location.hash === "#reviews" ? "reviews" : "quest";
+      $("questView").hidden = tab !== "quest"; $("reviewsView").hidden = tab !== "reviews";
+      document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
+    };
+    window.addEventListener("hashchange", () => { show(); window.scrollTo({ top: 0 }); });
+    show();
+  }
+
   // ---------- boot ----------
   fetch("data/reading.json", { cache: "no-store" })
     .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(data => { const S = compute(data); render(S); setupPending(S.today); document.body.classList.add("ready"); })
+    .then(data => { const S = compute(data); render(S); setupPending(S.today); window.ReviewsView.bind(S); setupTabs(); document.body.classList.add("ready"); })
     .catch(err => { $("hello").textContent = "Couldn't load the reading log."; $("tagline").textContent = String(err); });
 })();

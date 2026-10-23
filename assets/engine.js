@@ -3,7 +3,7 @@
 (function (root) {
   "use strict";
   // ---------- constants ----------
-  const XP = { page: 1, chapter: 15, minutesPerXp: 2, goalMet: 10, bookFinished: 200 };
+  const XP = { page: 1, chapter: 15, minutesPerXp: 2, goalMet: 10, bookFinished: 200, review: 50, longReview: 50, longReviewWords: 150, note: 5 };
   const LEVELS = [
     [0, "Spine Cracker"], [100, "Page Turner"], [250, "Chapter Chaser"], [450, "Dog-Ear Devotee"],
     [700, "Margin Scribbler"], [1000, "Lamp-Light Regular"], [1400, "Plot Hunter"], [1900, "Shelf Builder"],
@@ -33,6 +33,19 @@
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const plural = (n, w, p = w + "s") => `${n} ${n === 1 ? w : p}`;
 
+  // ---------- data normalisation (backward compatible) ----------
+  // Old files had only book.started/finished; every book now has reads[] and notes[].
+  function normalizeBooks(books) {
+    for (const b of books) {
+      if (!Array.isArray(b.reads)) b.reads = b.started ? [{ n: 1, started: b.started, finished: b.finished || null, review: null }] : [];
+      b.reads.forEach((r, i) => { r.n = r.n || i + 1; if (r.review === undefined) r.review = null; if (r.finished === undefined) r.finished = null; });
+      if (!Array.isArray(b.notes)) b.notes = [];
+      const last = b.reads[b.reads.length - 1];
+      b.currentRead = last && !last.finished ? last : null;
+    }
+    return books;
+  }
+
   // ---------- core computation ----------
   function compute(data, todayOverride) {
     const s = data.settings || {};
@@ -40,6 +53,7 @@
     const today = todayOverride || todayIn(s.timezone || "Asia/Kolkata");
     const books = data.books || [];
     const bookById = Object.fromEntries(books.map(b => [b.id, b]));
+    normalizeBooks(books);
     const log = (data.log || []).slice().sort((a, b) => a.date.localeCompare(b.date) || String(a.time || "").localeCompare(String(b.time || "")));
 
     // per-day totals
@@ -98,22 +112,44 @@
     const toNextFreeze = 7 - (streak % 7);
 
     // books
+    // progress counts only the book's current (or latest) read
     const progress = {};
     for (const e of log) {
+      const b = bookById[e.book], r = b && (b.currentRead || b.reads[b.reads.length - 1]);
+      if (r && (e.read != null ? +e.read !== r.n : (r.started && e.date < r.started))) continue;
       const p = progress[e.book] ||= { pages: 0, chapters: 0, minutes: 0 };
       p.pages += +e.pages || 0; p.chapters += +e.chapters || 0; p.minutes += +e.minutes || 0;
     }
-    const finished = books.filter(b => b.status === "finished").sort((a, b) => String(a.finished).localeCompare(String(b.finished)));
+    // every finished read counts (re-reads included)
+    const finishedReads = books.flatMap(b => b.reads.filter(r => r.finished).map(r => ({ book: b, read: r, finished: r.finished })))
+      .sort((a, b) => a.finished.localeCompare(b.finished));
+    const finished = books.filter(b => b.reads.some(r => r.finished)).map(b => {
+      const fr = b.reads.filter(r => r.finished);
+      b.timesFinished = fr.length; b.lastFinished = fr[fr.length - 1].finished; b.firstFinished = fr[0].finished;
+      return b;
+    }).sort((a, b) => a.firstFinished.localeCompare(b.firstFinished));
+    const finishedCount = finishedReads.length;
+    const reviews = books.flatMap(b => b.reads.filter(r => r.review).map(r => ({ book: b, read: r, review: r.review })));
+    const notes = books.flatMap(b => b.notes.map(n => ({ book: b, note: n })));
+    const words = t => String(t || "").trim().split(/\s+/).filter(Boolean).length;
+    const longReviews = reviews.filter(x => words(x.review.thoughts) >= XP.longReviewWords).length;
+    let maxShift = 0;
+    for (const b of books) {
+      const rs = b.reads.map(r => r.review && r.review.rating).filter(v => typeof v === "number");
+      if (rs.length > 1) maxShift = Math.max(maxShift, Math.max(...rs) - Math.min(...rs));
+    }
+    const rereads = books.filter(b => b.reads.length > 1).length;
     const reading = books.filter(b => b.status === "reading");
     const next = books.filter(b => b.status === "next");
     const year = today.slice(0, 4);
-    const finishedThisYear = finished.filter(b => String(b.finished || "").startsWith(year)).length;
+    const finishedThisYear = finishedReads.filter(x => x.finished.startsWith(year)).length;
 
     // XP
     let xp = 0;
     for (const e of log) xp += (+e.pages || 0) * XP.page + (+e.chapters || 0) * XP.chapter + Math.floor((+e.minutes || 0) / XP.minutesPerXp);
     const metDays = Object.keys(days).filter(dayMet);
-    xp += metDays.length * XP.goalMet + finished.length * XP.bookFinished;
+    xp += metDays.length * XP.goalMet + finishedCount * XP.bookFinished
+      + reviews.length * XP.review + longReviews * XP.longReview + notes.length * XP.note;
     let li = 0; for (let i = 0; i < LEVELS.length; i++) if (xp >= LEVELS[i][0]) li = i;
     const level = { n: li + 1, title: LEVELS[li][1], floor: LEVELS[li][0], next: LEVELS[li + 1] ? LEVELS[li + 1][0] : null, nextTitle: LEVELS[li + 1] ? LEVELS[li + 1][1] : null };
 
@@ -137,7 +173,7 @@
     const timeOf = e => String(e.time || "");
     const nightOwl = log.some(e => { const t = timeOf(e); return t && (t >= "23:00" || t < "04:00"); });
     const earlyBird = log.some(e => { const t = timeOf(e); return t && t >= "04:00" && t < "07:00"; });
-    const halfway = books.some(b => { const p = progress[b.id]; if (!p) return false; return b.totalPages ? p.pages / b.totalPages >= 0.5 : b.totalChapters ? p.chapters / b.totalChapters >= 0.5 : false; }) || finished.length > 0;
+    const halfway = books.some(b => { const p = progress[b.id]; if (!p) return false; return b.totalPages ? p.pages / b.totalPages >= 0.5 : b.totalChapters ? p.chapters / b.totalChapters >= 0.5 : false; }) || finishedCount > 0;
 
     const badges = [
       { id: "first-chapter", icon: "🔖", name: "First Chapter", desc: "Finish a chapter.", got: totals.chapters >= 1 },
@@ -148,8 +184,13 @@
       { id: "century-week", icon: "💯", name: "Century Week", desc: "100 pages in one week (Mon–Sun).", got: bestWeekPages >= 100, prog: [Math.min(bestWeekPages, 100), 100] },
       { id: "deep-dive", icon: "🤿", name: "Deep Dive", desc: "60 minutes in one day.", got: Object.values(days).some(t => t.minutes >= 60) },
       { id: "halfway", icon: "🧭", name: "Halfway There", desc: "Reach the middle of a book.", got: halfway },
-      { id: "first-book", icon: "🏁", name: "The End", desc: "Finish your first book.", got: finished.length >= 1 },
-      { id: "five-books", icon: "📚", name: "Shelf of Five", desc: "Finish 5 books.", got: finished.length >= 5, prog: [Math.min(finished.length, 5), 5] },
+      { id: "first-book", icon: "🏁", name: "The End", desc: "Finish your first book.", got: finishedCount >= 1 },
+      { id: "five-books", icon: "📚", name: "Shelf of Five", desc: "Finish 5 books.", got: finishedCount >= 5, prog: [Math.min(finishedCount, 5), 5] },
+      { id: "first-review", icon: "✍️", name: "First Review", desc: "Write your first review.", got: reviews.length >= 1 },
+      { id: "critic", icon: "🎭", name: "Critic", desc: "Write 5 reviews.", got: reviews.length >= 5, prog: [Math.min(reviews.length, 5), 5] },
+      { id: "margin-notes", icon: "🗒️", name: "Margin Notes", desc: "Add a journal note mid-book.", got: notes.length >= 1 },
+      { id: "rereader", icon: "🔁", name: "Re-reader", desc: "Start a second read of a book.", got: rereads >= 1 },
+      { id: "changed-mind", icon: "🔄", name: "Changed My Mind", desc: "A rating moves 1.5+ stars between reads.", got: maxShift >= 1.5 },
       { id: "night-owl", icon: "🦉", name: "Night Owl", desc: "Read after 11 PM.", got: nightOwl },
       { id: "early-bird", icon: "🌅", name: "Early Bird", desc: "Read before 7 AM.", got: earlyBird },
       { id: "ice", icon: "🧊", name: "Saved by Ice", desc: "A streak freeze kept your streak alive.", got: frozen.size > 0 },
@@ -157,7 +198,7 @@
     ];
 
     return { data, s, g, today, start, days, log, weeks, curWeek, goalFor, dayMet, isRead, streak, longest, freezes, earned, frozen, readToday, toNextFreeze,
-      books, bookById, progress, finished, reading, next, year, finishedThisYear, xp, level, thisWeek, lastWeek, bestWeekPages, totals, badges };
+      books, bookById, progress, finished, finishedReads, finishedCount, reviews, notes, longReviews, words, maxShift, rereads, reading, next, year, finishedThisYear, xp, level, thisWeek, lastWeek, bestWeekPages, totals, badges };
   }
 
 
@@ -187,6 +228,6 @@
   }
   const coverSrc = book => book.cover || fallbackCover(book);
 
-  const api = { hue, fallbackCover, coverSrc, compute, XP, LEVELS, BOOK_MILESTONES, MAX_FREEZES, addDays, diffDays, weekday, mondayOf, fmt, esc, plural };
+  const api = { normalizeBooks, hue, fallbackCover, coverSrc, compute, XP, LEVELS, BOOK_MILESTONES, MAX_FREEZES, addDays, diffDays, weekday, mondayOf, fmt, esc, plural };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.ReadingEngine = api;
 })(typeof window !== "undefined" ? window : globalThis);

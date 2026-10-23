@@ -24,7 +24,16 @@
       "status": "reading",
       "started": "2026-10-24",
       "finished": null,
-      "cover": "assets/covers/project-hail-mary.svg"
+      "cover": "assets/covers/project-hail-mary.svg",
+      "reads": [
+        {
+          "n": 1,
+          "started": "2026-10-24",
+          "finished": null,
+          "review": null
+        }
+      ],
+      "notes": []
     },
     {
       "id": "dark-matter",
@@ -36,7 +45,9 @@
       "cover": "assets/covers/dark-matter.svg",
       "status": "next",
       "started": null,
-      "finished": null
+      "finished": null,
+      "reads": [],
+      "notes": []
     },
     {
       "id": "piranesi",
@@ -49,7 +60,9 @@
       "cover": "assets/covers/piranesi.svg",
       "status": "next",
       "started": null,
-      "finished": null
+      "finished": null,
+      "reads": [],
+      "notes": []
     },
     {
       "id": "out",
@@ -63,7 +76,9 @@
       "cover": "assets/covers/out.svg",
       "status": "next",
       "started": null,
-      "finished": null
+      "finished": null,
+      "reads": [],
+      "notes": []
     }
   ],
   "log": [

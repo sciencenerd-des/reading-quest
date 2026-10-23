@@ -24,6 +24,12 @@
     <div class="level-card" id="levelCard"></div>
   </header>
 
+  <nav class="tabs" aria-label="Sections">
+    <a href="#quest" data-tab="quest" class="tab">Quest</a>
+    <a href="#reviews" data-tab="reviews" class="tab">Reviews &amp; Reflections</a>
+  </nav>
+
+  <div id="questView" class="view">
   <section class="grid hero">
     <article class="card today" id="todayCard"></article>
     <article class="card streak" id="streakCard"></article>
@@ -67,13 +73,35 @@
     <ul class="pending-list" id="pendingList"></ul>
   </section>
 
+  </div>
+
+  <div id="reviewsView" class="view" hidden>
+    <section class="card rv-intro">
+      <div>
+        <p class="eyebrow">Reviews &amp; Reflections</p>
+        <h2 class="rv-h">What the books left behind</h2>
+        <p class="muted">Ratings, verdicts, feelings and the questions that linger, kept per read, so you can see how a book changes as you do.</p>
+      </div>
+      <div class="stats rv-stats" id="rvStats"></div>
+    </section>
+    <section class="card" id="rvCurrent"></section>
+    <div class="rv-filters" id="rvFilters" hidden>
+      <label>Sort<select id="rvSort"><option value="recent">Newest review</option><option value="rating-desc">Rating: high → low</option><option value="rating-asc">Rating: low → high</option><option value="title">Title A–Z</option></select></label>
+      <label>Year<select id="rvYear"></select></label>
+      <label>Mood<select id="rvMood"></select></label>
+      <button type="button" class="ghost" id="rvReset">Reset</button>
+    </div>
+    <div id="rvList"></div>
+  </div>
+
   <footer class="foot">
-    <p>XP: 1 per page · 15 per chapter · 1 per 2 minutes · +10 when the daily goal is met · +200 per finished book.</p>
+    <p>XP: 1 per page · 15 per chapter · 1 per 2 minutes · +10 when the daily goal is met · +200 per finished read · +50 per review (+50 if 150+ words) · +5 per journal note.</p>
     <p class="muted" id="updated"></p>
   </footer>
 </main>
 <div class="toast" id="toast" role="status"></div>
 <script src="assets/engine.js"></script>
+<script src="assets/reviews.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>
