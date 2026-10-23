@@ -7,6 +7,8 @@ Examples
   ./log.py finish                                                       # finish the current book
   ./log.py start --title "The Martian" --author "Andy Weir" --pages 384 --chapters 26
   ./log.py add --title "Dune" --author "Frank Herbert" --pages 688       # add to Next up
+  ./log.py add --title "Piranesi" --chapters 7 --label part              # count "parts" instead of chapters
+  (a cover is picked up automatically from assets/covers/<book-id>.svg; --cover PATH overrides)
   ./log.py remove --book dune                                           # drop from Next up
   ./log.py yearly 15                                                    # change the yearly book goal
   ./log.py undo                                                         # remove the last log entry
@@ -57,6 +59,17 @@ def find_book(d, ref=None, status=None):
     return cur[0]
 
 
+def apply_extras(b, args):
+    if getattr(args, "label", None):
+        b["chapterLabel"] = args.label
+    cover = getattr(args, "cover", None)
+    auto = f"assets/covers/{b['id']}.svg"
+    if cover:
+        b["cover"] = cover
+    elif not b.get("cover") and os.path.exists(os.path.join(ROOT, auto)):
+        b["cover"] = auto
+
+
 def git_push(msg):
     def run(*a):
         return subprocess.run(a, cwd=ROOT, check=True)
@@ -94,10 +107,12 @@ def main():
     s.add_argument("--title", required=True); s.add_argument("--author", default="")
     s.add_argument("--pages", type=int); s.add_argument("--chapters", type=int)
     s.add_argument("--date", type=check_date)
+    s.add_argument("--cover"); s.add_argument("--label", help='unit name, e.g. "part" (default "chapter")')
 
     a = sub.add_parser("add", help="add a book to Next up")
     a.add_argument("--title", required=True); a.add_argument("--author", default="")
     a.add_argument("--pages", type=int); a.add_argument("--chapters", type=int)
+    a.add_argument("--cover"); a.add_argument("--label", help='unit name, e.g. "part" (default "chapter")')
 
     rm = sub.add_parser("remove", help="remove a Next-up book"); rm.add_argument("--book", required=True)
     y = sub.add_parser("yearly", help="set yearly book goal"); y.add_argument("n", type=int)
@@ -135,6 +150,7 @@ def main():
                 b[k] = v
         b.pop("suggested", None)
         b.update(status="reading", started=args.date or t, finished=None)
+        apply_extras(b, args)
         msg = f"Started {b['title']}"
     elif args.cmd == "add":
         if any(x["title"].lower() == args.title.lower() for x in d["books"]):
@@ -142,6 +158,7 @@ def main():
         b = {"id": slug(args.title), "title": args.title, "author": args.author, "status": "next", "started": None, "finished": None}
         if args.pages: b["totalPages"] = args.pages
         if args.chapters: b["totalChapters"] = args.chapters
+        apply_extras(b, args)
         d["books"].append(b)
         msg = f"Next up: {args.title}"
     elif args.cmd == "remove":

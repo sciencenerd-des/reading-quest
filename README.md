@@ -13,6 +13,7 @@ No backend: the page fetches `data/reading.json` and computes everything (goal, 
 | `assets/engine.js` | Pure stats engine, shared by the browser and node |
 | `assets/app.js` | Rendering + the browser-only "pending" quick log |
 | `log.py` | One-command updater: edits the JSON, prints stats, commits and pushes |
+| `assets/covers/*.svg` | Original hand-made cover art (300×450 SVG), one per book |
 | `stats.js` | `node stats.js [--json] [YYYY-MM-DD]` prints what the site shows |
 
 ## Updating (one command)
@@ -59,6 +60,9 @@ cd /workspace/reading-quest && git add -A && git commit -m "Update reading log" 
     "totalChapters": 30,                // optional
     "totalPages": 496,                  // optional (progress uses pages if present, else chapters)
     "edition": "…",                     // optional free text
+    "translator": "…",                  // optional, shown in Next up
+    "chapterLabel": "part",             // optional unit name for totalChapters (default "chapter")
+    "cover": "assets/covers/project-hail-mary.svg", // optional; missing → generated typographic cover
     "status": "reading",                // "reading" | "finished" | "next"
     "suggested": false,                 // optional; shows a "Robin's pick" tag in Next up
     "started": "2026-10-24",            // YYYY-MM-DD or null
@@ -77,6 +81,24 @@ cd /workspace/reading-quest && git add -A && git commit -m "Update reading log" 
 ```
 
 Several entries on one date are summed. Book progress = sum of that book's `pages` and `chapters` in the log; current chapter = chapters done + 1.
+
+## Covers
+
+Every book shows a cover in the Now reading card, Next up and the bookshelf (finished books; the current book holds a faded "reserved" slot until then).
+
+- **Books with art**: `cover` points at a file in `assets/covers/`. Current art: `project-hail-mary.svg`, `dark-matter.svg`, `piranesi.svg`, `out.svg`. All are original stylised artwork (no publisher covers, traced images or stock photos).
+- **Books without art**: `engine.js → fallbackCover()` generates a typographic SVG (title, author, hue derived from the title). If a `cover` file fails to load, the page swaps in the generated one automatically.
+
+### Adding art for a new book
+
+1. Draw a `300×450` SVG and save it as `assets/covers/<book-id>.svg` (the id is the slug, e.g. `the-left-hand-of-darkness`).
+2. Keep the house style so the shelf looks like one set:
+   - dark gradient background, one luminous focal element, flat silhouettes, no raster images;
+   - bottom band: `<rect y="330" height="120">` fading to near-black, title in `Fraunces, Georgia, serif` 700 (25–44 px, letter-spaced caps, `#f4ead7`) at y≈390–405, author in `IBM Plex Mono` 9 px, letter-spacing 4, in the cover's accent colour at y=428;
+   - thin frame: `<rect x="10" y="10" width="280" height="430" rx="4" fill="none" stroke="#f2d7a0" stroke-opacity=".32"/>`;
+   - add a `<title>` describing the art for screen readers.
+3. `./log.py add …` / `./log.py start …` pick up `assets/covers/<book-id>.svg` automatically; otherwise set `"cover"` in the JSON (or pass `--cover PATH`).
+4. Check it with `python3 -c "import xml.dom.minidom as m; m.parse('assets/covers/<id>.svg')"`, then commit and push.
 
 ## Rules (all computed from the log)
 

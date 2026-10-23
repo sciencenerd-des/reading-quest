@@ -160,6 +160,33 @@
       books, bookById, progress, finished, reading, next, year, finishedThisYear, xp, level, thisWeek, lastWeek, bestWeekPages, totals, badges };
   }
 
-  const api = { compute, XP, LEVELS, BOOK_MILESTONES, MAX_FREEZES, addDays, diffDays, weekday, mondayOf, fmt, esc, plural };
+
+  // ---------- covers ----------
+  // A book shows `cover` (path to an SVG/image) if set; otherwise a generated typographic SVG.
+  function hue(s) { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; }
+  function wrap(text, max) {
+    const words = String(text).toUpperCase().split(/\s+/).filter(Boolean), lines = [];
+    let cur = "";
+    for (const w of words) { if ((cur + " " + w).trim().length > max && cur) { lines.push(cur); cur = w; } else cur = (cur + " " + w).trim(); }
+    if (cur) lines.push(cur);
+    return lines.slice(0, 4);
+  }
+  function fallbackCover(book) {
+    const x = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const h = hue(book.title), h2 = (h + 40) % 360;
+    const lines = wrap(book.title, 11);
+    const fs = lines.length > 2 ? 24 : 30, y0 = 392 - (lines.length - 1) * (fs + 4);
+    const rings = [150, 118, 88, 60, 34].map((r, i) => `<circle cx="150" cy="170" r="${r}" fill="none" stroke="hsl(${h} 70% 75%)" stroke-opacity="${0.12 + i * 0.08}" stroke-width="${1 + i * 0.4}"/>`).join("");
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 450"><defs><linearGradient id="g" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" stop-color="hsl(${h} 45% 22%)"/><stop offset="1" stop-color="hsl(${h2} 50% 8%)"/></linearGradient></defs>` +
+      `<rect width="300" height="450" fill="url(#g)"/>${rings}<circle cx="150" cy="170" r="12" fill="hsl(${h} 80% 72%)"/>` +
+      `<line x1="40" y1="${y0 - fs - 14}" x2="260" y2="${y0 - fs - 14}" stroke="#f2d7a0" stroke-opacity=".35"/>` +
+      lines.map((l, i) => `<text x="150" y="${y0 + i * (fs + 4)}" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="${fs}" letter-spacing="2" fill="#f4ead7">${x(l)}</text>`).join("") +
+      `<text x="150" y="428" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="4" fill="hsl(${h} 80% 72%)">${x(String(book.author || "").toUpperCase())}</text>` +
+      `<rect x="10" y="10" width="280" height="430" rx="4" fill="none" stroke="#f2d7a0" stroke-opacity=".32"/></svg>`;
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  }
+  const coverSrc = book => book.cover || fallbackCover(book);
+
+  const api = { hue, fallbackCover, coverSrc, compute, XP, LEVELS, BOOK_MILESTONES, MAX_FREEZES, addDays, diffDays, weekday, mondayOf, fmt, esc, plural };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.ReadingEngine = api;
 })(typeof window !== "undefined" ? window : globalThis);

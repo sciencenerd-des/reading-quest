@@ -2,7 +2,7 @@
 (() => {
   "use strict";
 
-  const { compute, XP, MAX_FREEZES, BOOK_MILESTONES, addDays, diffDays, weekday, mondayOf, fmt, esc, plural } = window.ReadingEngine;
+  const { compute, hue, fallbackCover, coverSrc, XP, MAX_FREEZES, BOOK_MILESTONES, addDays, diffDays, weekday, mondayOf, fmt, esc, plural } = window.ReadingEngine;
   const $ = id => document.getElementById(id);
 
   // ---------- rendering ----------
@@ -63,20 +63,21 @@
     const cb = S.reading[0];
     if (cb) {
       const p = S.progress[cb.id] || { pages: 0, chapters: 0, minutes: 0 };
+      const unit = cb.chapterLabel || "chapter";
       const done = Math.min(p.chapters, cb.totalChapters || p.chapters);
       const curCh = cb.totalChapters ? Math.min(cb.totalChapters, done + 1) : done + 1;
       const pctBook = cb.totalPages ? p.pages / cb.totalPages : cb.totalChapters ? done / cb.totalChapters : 0;
       const remain = cb.totalPages ? Math.max(0, cb.totalPages - p.pages) : null;
       const eta = remain != null ? addDays(S.today, Math.ceil(remain / goal.pages)) : null;
       const ticks = cb.totalChapters ? Array.from({ length: cb.totalChapters }, (_, i) =>
-        `<i class="${i < done ? "done" : i === done ? "now" : ""}" title="Chapter ${i + 1}"></i>`).join("") : "";
+        `<i class="${i < done ? "done" : i === done ? "now" : ""}" title="${esc(cap(unit))} ${i + 1}"></i>`).join("") : "";
       $("currentCard").innerHTML = `
         <div class="card-head"><h2>Now reading</h2><span class="muted small">since ${fmt(cb.started || S.start)}</span></div>
         <div class="book-now">
-          <div class="cover" style="--h:${hue(cb.title)}"><span>${esc(cb.title)}</span><small>${esc(cb.author)}</small></div>
+          ${coverImg(cb, "cover")}
           <div class="book-meta">
             <h3>${esc(cb.title)}</h3><p class="muted">${esc(cb.author)}${cb.edition ? ` · <span class="small">${esc(cb.edition)}</span>` : ""}</p>
-            <p class="chapter-now">Chapter <b>${curCh}</b>${cb.totalChapters ? ` of ${cb.totalChapters}` : ""} <span class="muted">· ${plural(done, "chapter")} done${cb.totalPages ? ` · ${p.pages} of ${cb.totalPages} pages` : ""}</span></p>
+            <p class="chapter-now">${esc(cap(unit))} <b>${curCh}</b>${cb.totalChapters ? ` of ${cb.totalChapters}` : ""} <span class="muted">· ${plural(done, unit)} done${cb.totalPages ? ` · ${p.pages} of ${cb.totalPages} pages` : ""}</span></p>
             <div class="bar"><i style="width:${(pctBook * 100).toFixed(1)}%"></i><em>${Math.round(pctBook * 100)}%</em></div>
             ${ticks ? `<div class="ticks" aria-label="chapters">${ticks}</div>` : ""}
             ${eta ? `<p class="muted small">At ${goal.pages} pages a day you'd finish around <b>${fmt(eta, { day: "numeric", month: "short", year: "numeric" })}</b>. Finishing is worth +${XP.bookFinished} XP.</p>` : ""}
@@ -159,13 +160,13 @@
 
     // shelf
     $("shelfCard").innerHTML = `<div class="card-head"><h2>Bookshelf</h2><span class="muted small">${plural(nf, "book")} finished</span></div>
-      ${nf ? `<div class="shelf">${S.finished.map(b => `<div class="spine" style="--h:${hue(b.title)};--w:${Math.max(26, Math.min(48, (b.totalPages || 300) / 12))}px" title="${esc(b.title)} · ${esc(b.author)} · finished ${b.finished ? fmt(b.finished, { day: "numeric", month: "short", year: "numeric" }) : ""}"><span>${esc(b.title)}</span></div>`).join("")}</div><div class="plank"></div>`
-        : `<div class="shelf empty">${Array.from({ length: 6 }, () => `<div class="spine ghost"></div>`).join("")}</div><div class="plank"></div><p class="muted small">Empty for now. Your first finished book goes here.</p>`}`;
+      ${nf ? `<div class="shelf">${S.finished.map(b => `<figure class="shelf-book" title="${esc(b.title)} · ${esc(b.author)} · finished ${b.finished ? fmt(b.finished, { day: "numeric", month: "short", year: "numeric" }) : ""}">${coverImg(b, "")}</figure>`).join("")}</div><div class="plank"></div>`
+        : `<div class="shelf empty">${cb ? `<figure class="shelf-book reserved" title="Reserved for ${esc(cb.title)}">${coverImg(cb, "")}<figcaption>reserved</figcaption></figure>` : ""}${Array.from({ length: cb ? 3 : 4 }, () => `<div class="slot"></div>`).join("")}</div><div class="plank"></div><p class="muted small">Empty for now. ${cb ? `The first slot is saved for ${esc(cb.title)}.` : "Your first finished book goes here."}</p>`}`;
 
     // next up
     $("nextCard").innerHTML = `<div class="card-head"><h2>Next up</h2><span class="muted small">${plural(S.next.length, "book")}</span></div>
-      ${S.next.length ? `<ol class="next">${S.next.map(b => `<li><span class="mini-cover" style="--h:${hue(b.title)}"></span><div><b>${esc(b.title)}</b><span class="muted small">${esc(b.author)}${b.totalPages ? ` · ${b.totalPages} pp` : ""}</span></div>${b.suggested ? `<span class="pill">Robin's pick</span>` : ""}</li>`).join("")}</ol>` : `<p class="muted">Tell Robin what you want to read next.</p>`}
-      <p class="muted small">Swap these for your own any time. Just tell Robin.</p>`;
+      ${S.next.length ? `<ol class="next">${S.next.map(b => `<li>${coverImg(b, "mini-cover")}<div><b>${esc(b.title)}</b><span class="muted small">${esc(b.author)}${b.translator ? `, tr. ${esc(b.translator)}` : ""}${b.totalChapters ? ` · ${plural(b.totalChapters, b.chapterLabel || "chapter")}` : ""}${b.totalPages ? ` · ${b.totalPages} pp` : ""}</span></div><span class="pill">#${S.next.indexOf(b) + 1}</span></li>`).join("")}</ol>` : `<p class="muted">Tell Robin what you want to read next.</p>`}
+      <p class="muted small">In reading order. Tell Robin to reorder or add more.</p>`;
 
     // recent log
     const recent = S.log.slice().reverse().slice(0, 8);
@@ -178,7 +179,11 @@
     window.__READING_QUEST__ = { today: S.today, goal: { pages: goal.pages, minutes: goal.minutes, met }, streak: S.streak, longest: S.longest, freezes: S.freezes, xp: S.xp, level: S.level, badges: S.badges.filter(b => b.got).map(b => b.name) };
   }
 
-  function hue(s) { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; }
+  const coverImg = (b, cls, extra = "") => `<img class="${cls}" src="${esc(coverSrc(b))}" data-fallback="${esc(fallbackCover(b))}" alt="Cover art: ${esc(b.title)}" loading="lazy" ${extra}>`;
+  // if a cover file is missing, swap in the generated one
+  document.addEventListener("error", ev => { const el = ev.target; if (el.tagName === "IMG" && el.dataset.fallback && el.src !== el.dataset.fallback) el.src = el.dataset.fallback; }, true);
+
+  function cap(s) { return String(s).charAt(0).toUpperCase() + String(s).slice(1); }
 
   // ---------- pending quick log (localStorage only) ----------
   const PKEY = "reading-quest-pending";
