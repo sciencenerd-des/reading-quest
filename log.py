@@ -21,6 +21,8 @@ Reviews & journal (text options accept a literal string, "-" for stdin, or *-fil
       --character Rocky --point "Would I have stayed?" --reread yes
   cat thoughts.txt | ./log.py review --book piranesi --rating 5 --thoughts -
   ./log.py reread --book project-hail-mary                              # start read #2 of a finished book
+  ./log.py journal --page 90 --where "Grace briefs the carrier" --thoughts "Still setting up." \\
+      --working "Non-linear reveals|Characters" --not-working "Amnesia flashbacks feel gimmicky"
 Add --no-push to any command to only edit the file (no git commit/push).
 """
 import argparse, datetime, json, os, re, subprocess, sys
@@ -202,6 +204,16 @@ def main():
     nt.add_argument("--read", type=int, help="attach to read #N (default: current/latest; 0 = between reads)")
     nt.add_argument("--date", type=check_date)
 
+    jr = sub.add_parser("journal", help="add a daily Reading Journal entry (thoughts, what's working / not, progress)")
+    jr.add_argument("--book", help="book id or title (default: current book)")
+    jr.add_argument("--page", type=int, help="page reached")
+    jr.add_argument("--where", help='where you are in the story, e.g. "Grace reaches the carrier"')
+    jr.add_argument("--thoughts", help='free-form thoughts; "-" reads stdin'); jr.add_argument("--thoughts-file")
+    jr.add_argument("--working", action="append", default=[], help='what works; "a|b" or repeat the flag')
+    jr.add_argument("--not-working", action="append", default=[], help="what doesn't; \"a|b\" or repeat the flag")
+    jr.add_argument("--read", type=int, help="attach to read #N (default: current/latest; 0 = between reads)")
+    jr.add_argument("--date", type=check_date)
+
     rr = sub.add_parser("reread", help="start a new read of a book you've read before")
     rr.add_argument("--book", required=True); rr.add_argument("--date", type=check_date)
     sub.add_parser("show", help="print stats only")
@@ -323,6 +335,33 @@ def main():
                 n["read"] = (open_read(b) or b["reads"][-1])["n"]
         b["notes"].append(n)
         msg = f"Note on {b['title']} ({n['date']})"
+    elif args.cmd == "journal":
+        b = find_book(d, args.book) if args.book else find_book(d)
+        split = lambda xs: [p.strip() for x in xs for p in x.split("|") if p.strip()]
+        text = get_text(args.thoughts, args.thoughts_file)
+        working, notw = split(args.working), split(args.not_working)
+        if not (text or working or notw):
+            sys.exit("Give at least one of --thoughts, --working, --not-working.")
+        if args.page is not None and b.get("totalPages") and not (0 < args.page <= b["totalPages"]):
+            sys.exit(f"--page must be 1-{b['totalPages']} for {b['title']}.")
+        n = {"date": args.date or t}
+        if args.page is not None:
+            n["page"] = args.page
+        if args.where:
+            n["where"] = args.where
+        n["text"] = text or ""
+        if working:
+            n["working"] = working
+        if notw:
+            n["notWorking"] = notw
+        if args.read != 0:
+            if args.read:
+                pick_read(b, args.read)
+                n["read"] = args.read
+            elif b["reads"]:
+                n["read"] = (open_read(b) or b["reads"][-1])["n"]
+        b["notes"].append(n)
+        msg = f"Journal: {b['title']} ({n['date']}" + (f", p. {args.page}" if args.page is not None else "") + ")"
     elif args.cmd == "reread":
         b = find_book(d, args.book)
         if open_read(b):

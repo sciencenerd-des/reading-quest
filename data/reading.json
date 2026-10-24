@@ -33,7 +33,23 @@
           "review": null
         }
       ],
-      "notes": []
+      "notes": [
+        {
+          "date": "2026-10-25",
+          "page": 90,
+          "where": "Dr. Grace discovers how Astrophage reproduces; he's sent to a Chinese aircraft carrier to explain his findings, and Project Hail Mary is discussed.",
+          "text": "The book is still setting up the story, characters and arcs, and it feels a little dragged out.",
+          "working": [
+            "The transitions between the non-linear storylines, revealing the mystery layer by layer, are incredible.",
+            "The characters are great, distinctive and feel real."
+          ],
+          "notWorking": [
+            "As a storytelling device, the amnesia and the convenient flashbacks are becoming repetitive and gimmicky.",
+            "The pacing feels a little dragged out."
+          ],
+          "read": 1
+        }
+      ]
     },
     {
       "id": "dark-matter",

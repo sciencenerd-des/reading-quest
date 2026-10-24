@@ -26,6 +26,7 @@
 
   <nav class="tabs" aria-label="Sections">
     <a href="#quest" data-tab="quest" class="tab">Quest</a>
+    <a href="#journal" data-tab="journal" class="tab">Journal</a>
     <a href="#reviews" data-tab="reviews" class="tab">Reviews &amp; Reflections</a>
   </nav>
 
@@ -75,6 +76,22 @@
 
   </div>
 
+  <div id="journalView" class="view" hidden>
+    <section class="card rv-intro">
+      <div>
+        <p class="eyebrow">Reading Journal</p>
+        <h2 class="rv-h">Daily thought dump</h2>
+        <p class="muted">Where you are, what's landing, what isn't. Dated and tied to the page, so you can look back at how a book felt while you were inside it.</p>
+        <p class="small jr-nudge" id="jrNudge"></p>
+      </div>
+      <div class="stats rv-stats" id="jrStats"></div>
+    </section>
+    <div class="rv-filters" id="jrFilters" hidden>
+      <label>Book<select id="jrBook"></select></label>
+    </div>
+    <div id="jrList"></div>
+  </div>
+
   <div id="reviewsView" class="view" hidden>
     <section class="card rv-intro">
       <div>
@@ -95,13 +112,14 @@
   </div>
 
   <footer class="foot">
-    <p>XP: 1 per page · 15 per chapter · 1 per 2 minutes · +10 when the daily goal is met · +200 per finished read · +50 per review (+50 if 150+ words) · +5 per journal note.</p>
+    <p>XP: 1 per page · 15 per chapter · 1 per 2 minutes · +10 when the daily goal is met · +200 per finished read · +50 per review (+50 if 150+ words) · +5 per journal entry.</p>
     <p class="muted" id="updated"></p>
   </footer>
 </main>
 <div class="toast" id="toast" role="status"></div>
 <script src="assets/engine.js"></script>
 <script src="assets/reviews.js"></script>
+<script src="assets/journal.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

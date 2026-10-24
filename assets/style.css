@@ -183,3 +183,24 @@ blockquote p{margin:0;font:italic 16px/1.55 var(--serif)} blockquote cite{displa
 .sample-banner{background:repeating-linear-gradient(45deg,#ff7a7a22 0 12px,#ff7a7a11 12px 24px);border:1px solid #ff7a7a88;color:#ffd0d0;border-radius:14px;padding:12px 16px;margin-bottom:16px;font:600 14px var(--mono);text-align:center;letter-spacing:.06em}
 @media (max-width:820px){.rv-intro{grid-template-columns:1fr}.tvn{grid-template-columns:1fr}.tvn-arrow{text-align:center}}
 @media (max-width:520px){.rv-head,.cur-notes{flex-direction:column}.rv-cover{width:80px;height:120px}.spark{width:100%}}
+/* ---------- reading journal ---------- */
+.jr-nudge{margin:10px 0 0;color:var(--amber2)}
+.jr-entry{padding:20px 22px}
+.jr-head{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.jr-cover{flex:none;width:44px;height:66px;object-fit:cover;border-radius:2px 5px 5px 2px;box-shadow:0 6px 14px #000a,0 0 0 1px #ffffff14}
+.jr-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px} .jr-meta .eyebrow{margin:0} .jr-meta h3{font-size:20px}
+.jr-page{flex:none;text-align:right;color:var(--muted);font-size:12px} .jr-page b{font:700 28px var(--serif);color:var(--amber2)} .jr-page small{font-size:12px}
+.jr-entry h4{margin:0 0 6px;font:600 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+.jr-progress{padding:12px 14px;border-radius:12px;background:#ffffff05;border:1px solid var(--line);margin-bottom:14px}
+.jr-progress p{margin:6px 0 0;font:italic 15px/1.55 var(--serif);color:#e4dfd3}
+.jr-progress .bar{margin:4px 0 2px}
+.jr-thoughts{margin-bottom:14px}
+.jr-wn{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.jr-col{padding:12px 14px;border-radius:12px;border:1px solid var(--line)}
+.jr-col.good{background:#7bd88f0c;border-color:#7bd88f40} .jr-col.good h4{color:var(--green)}
+.jr-col.bad{background:#ff7a7a0c;border-color:#ff7a7a40} .jr-col.bad h4{color:var(--red)}
+.jr-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.jr-list li{display:flex;gap:8px;line-height:1.5}
+.jr-ic{flex:none;font:700 13px/1.5 var(--mono)} .jr-list.good .jr-ic{color:var(--green)} .jr-list.bad .jr-ic{color:var(--red)}
+.t-wn{margin:4px 0 0} .t-wn.good{color:var(--green)} .t-wn.bad{color:#ff9a8a}
+@media (max-width:620px){.jr-wn{grid-template-columns:1fr}.jr-entry{padding:16px}.jr-page b{font-size:22px}}

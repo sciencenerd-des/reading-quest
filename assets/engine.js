@@ -139,6 +139,11 @@
       if (rs.length > 1) maxShift = Math.max(maxShift, Math.max(...rs) - Math.min(...rs));
     }
     const rereads = books.filter(b => b.reads.length > 1).length;
+    // reading journal = book notes (a note may carry page / working / notWorking)
+    const journalDays = new Set(notes.map(x => x.note.date).filter(Boolean));
+    let journalStreak = 0, journalLongest = 0, run = 0;
+    for (const d of [...journalDays].sort()) { run = journalDays.has(addDays(d, -1)) ? run + 1 : 1; journalLongest = Math.max(journalLongest, run); }
+    for (let d = journalDays.has(today) ? today : addDays(today, -1); journalDays.has(d); d = addDays(d, -1)) journalStreak++;
     const reading = books.filter(b => b.status === "reading");
     const next = books.filter(b => b.status === "next");
     const year = today.slice(0, 4);
@@ -188,7 +193,8 @@
       { id: "five-books", icon: "📚", name: "Shelf of Five", desc: "Finish 5 books.", got: finishedCount >= 5, prog: [Math.min(finishedCount, 5), 5] },
       { id: "first-review", icon: "✍️", name: "First Review", desc: "Write your first review.", got: reviews.length >= 1 },
       { id: "critic", icon: "🎭", name: "Critic", desc: "Write 5 reviews.", got: reviews.length >= 5, prog: [Math.min(reviews.length, 5), 5] },
-      { id: "margin-notes", icon: "🗒️", name: "Margin Notes", desc: "Add a journal note mid-book.", got: notes.length >= 1 },
+      { id: "margin-notes", icon: "🗒️", name: "Margin Notes", desc: "Write your first journal entry.", got: notes.length >= 1 },
+      { id: "dear-diary", icon: "📓", name: "Dear Diary", desc: "Journal 3 days in a row.", got: journalLongest >= 3, prog: [Math.min(journalLongest, 3), 3] },
       { id: "rereader", icon: "🔁", name: "Re-reader", desc: "Start a second read of a book.", got: rereads >= 1 },
       { id: "changed-mind", icon: "🔄", name: "Changed My Mind", desc: "A rating moves 1.5+ stars between reads.", got: maxShift >= 1.5 },
       { id: "night-owl", icon: "🦉", name: "Night Owl", desc: "Read after 11 PM.", got: nightOwl },
@@ -198,7 +204,7 @@
     ];
 
     return { data, s, g, today, start, days, log, weeks, curWeek, goalFor, dayMet, isRead, streak, longest, freezes, earned, frozen, readToday, toNextFreeze,
-      books, bookById, progress, finished, finishedReads, finishedCount, reviews, notes, longReviews, words, maxShift, rereads, reading, next, year, finishedThisYear, xp, level, thisWeek, lastWeek, bestWeekPages, totals, badges };
+      books, bookById, progress, finished, finishedReads, finishedCount, reviews, notes, journalDays, journalStreak, journalLongest, longReviews, words, maxShift, rereads, reading, next, year, finishedThisYear, xp, level, thisWeek, lastWeek, bestWeekPages, totals, badges };
   }
 
 

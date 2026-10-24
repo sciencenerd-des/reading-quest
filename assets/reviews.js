@@ -29,7 +29,7 @@
 
   function thread(notes) {
     if (!notes.length) return "";
-    return `<ol class="thread">${notes.map(n => `<li><span class="t-dot"></span><div class="t-head mono">${longDate(n.date)}${n.where ? ` · ${esc(n.where)}` : ""}</div><div class="prose small-prose">${prose(n.text)}</div></li>`).join("")}</ol>`;
+    return `<ol class="thread">${notes.map(n => `<li><span class="t-dot"></span><div class="t-head mono">${longDate(n.date)}${n.page ? ` · p. ${n.page}` : ""}${n.where && !n.page ? ` · ${esc(n.where)}` : ""}</div>${n.text ? `<div class="prose small-prose">${prose(n.text)}</div>` : ""}${(n.working || []).length ? `<p class="small t-wn good">✓ ${(n.working).map(esc).join(" · ")}</p>` : ""}${(n.notWorking || []).length ? `<p class="small t-wn bad">✗ ${(n.notWorking).map(esc).join(" · ")}</p>` : ""}</li>`).join("")}</ol>`;
   }
 
   function reviewBody(b, r) {
@@ -128,7 +128,7 @@
     $("rvStats").innerHTML = `
       <div><b>${S.reviews.length}</b><span>${S.reviews.length === 1 ? "review" : "reviews"}</span></div>
       <div><b>${avg != null ? avg.toFixed(1) + "★" : "–"}</b><span>average</span></div>
-      <div><b>${S.notes.length}</b><span>journal notes</span></div>
+      <div><b>${S.notes.length}</b><span>journal entries</span></div>
       <div><b>${S.rereads}</b><span>re-read books</span></div>`;
     $("rvCurrent").innerHTML = currentArea(S);
 

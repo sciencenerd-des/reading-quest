@@ -17,7 +17,7 @@ const out = {
   xp: S.xp, level: `${S.level.n} · ${S.level.title}`, xpToNext: S.level.next ? S.level.next - S.xp : 0, nextLevel: S.level.nextTitle,
   currentBook: cb ? { title: cb.title, chapter: Math.min(cb.totalChapters || Infinity, p.chapters + 1), chaptersDone: p.chapters, totalChapters: cb.totalChapters, pagesRead: p.pages, totalPages: cb.totalPages, percent: cb.totalPages ? Math.round(p.pages / cb.totalPages * 100) : null } : null,
   thisWeek: { pages: S.thisWeek.pages, minutes: S.thisWeek.minutes, chapters: S.thisWeek.chapters, daysRead: S.thisWeek.read, goalMet: S.thisWeek.met },
-  booksFinished: S.finishedCount, reviews: S.reviews.length, notes: S.notes.length, finishedThisYear: S.finishedThisYear, yearlyGoal: S.s.yearlyGoal || 12,
+  booksFinished: S.finishedCount, reviews: S.reviews.length, notes: S.notes.length, journalStreak: S.journalStreak, journalDays: S.journalDays.size, finishedThisYear: S.finishedThisYear, yearlyGoal: S.s.yearlyGoal || 12,
   badges: S.badges.filter(b => b.got).map(b => b.name)
 };
 if (args.includes("--json")) { console.log(JSON.stringify(out, null, 2)); process.exit(0); }
@@ -27,5 +27,5 @@ Streak: ${out.streak} days (best ${out.longestStreak}) · freezes ${out.freezesB
 Level ${out.level} · ${out.xp} XP${out.nextLevel ? ` · ${out.xpToNext} XP to ${out.nextLevel}` : ""}
 ${cb ? `Now reading: ${cb.title} · chapter ${out.currentBook.chapter}/${cb.totalChapters || "?"} · ${p.pages}/${cb.totalPages || "?"} pages (${out.currentBook.percent}%)` : "Now reading: nothing"}
 This week: ${out.thisWeek.pages} pages · ${out.thisWeek.minutes} min · ${out.thisWeek.chapters} chapters · ${out.thisWeek.daysRead}/7 days read · goal met ${out.thisWeek.goalMet}/7
-Books: ${out.booksFinished} finished (re-reads count) · ${out.finishedThisYear}/${out.yearlyGoal} this year · ${out.reviews} reviews · ${out.notes} notes
+Books: ${out.booksFinished} finished (re-reads count) · ${out.finishedThisYear}/${out.yearlyGoal} this year · ${out.reviews} reviews · ${out.notes} journal entries (journal streak ${out.journalStreak})
 Badges: ${out.badges.join(", ") || "none yet"}`);

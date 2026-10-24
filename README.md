@@ -11,7 +11,8 @@ No backend: the page fetches `data/reading.json` and computes everything (goal, 
 | `data/reading.json` | All state: settings, books, daily log |
 | `index.html`, `assets/style.css` | Page and styles (dark, mobile-first) |
 | `assets/engine.js` | Pure stats engine, shared by the browser and node |
-| `assets/app.js` | Rendering, tabs (`#quest` / `#reviews`) + the browser-only "pending" quick log |
+| `assets/app.js` | Rendering, tabs (`#quest` / `#journal` / `#reviews`) + the browser-only "pending" quick log |
+| `assets/journal.js` | The Reading Journal tab |
 | `assets/reviews.js` | The Reviews & Reflections tab |
 | `log.py` | One-command updater: edits the JSON, prints stats, commits and pushes |
 | `assets/covers/*.svg` | Original hand-made cover art (300×450 SVG), one per book |
@@ -30,7 +31,22 @@ cd /workspace/reading-quest
 ./log.py remove --book dune      ./log.py yearly 15      ./log.py undo      ./log.py show
 ```
 
-### Reviews, journal notes, re-reads
+### Reading Journal (daily thought dump)
+
+```bash
+./log.py journal --page 90 \
+  --where "Grace works out how Astrophage reproduces; flown to a Chinese aircraft carrier" \
+  --thoughts "Still setting up the story; feels a little dragged out." \
+  --working "Non-linear reveals, layer by layer|Characters feel real" \
+  --not-working "Amnesia + convenient flashbacks feel gimmicky"
+./log.py journal --book piranesi --date 2026-11-02 --thoughts-file /tmp/today.txt --working "The House" --working "Voice"
+```
+
+- Every flag is optional except that one of `--thoughts` / `--working` / `--not-working` is required. `--working` / `--not-working` split on `|` and can be repeated.
+- `--thoughts` takes a literal string, `-` for stdin, or use `--thoughts-file`. Defaults: current book, current read, today (IST). `--page` is the page reached (checked against `totalPages`); `--where` is where you are in the story.
+- A journal entry is stored as a book note (below), so it also appears in the book's thread on the Reviews tab. Old plain `note` entries show in the Journal too.
+
+### Reviews, quick notes, re-reads
 
 ```bash
 ./log.py note --where "ch. 5" --text "Rocky is the best thing in this book."   # current book, current read
@@ -112,8 +128,14 @@ cd /workspace/reading-quest && git add -A && git commit -m "Update reading log" 
         "reread": "yes"                 // "yes" | "maybe" | "no"
       } */
     }],
-    "notes": [{                         // dated journal / discussion notes, threaded by date
-      "date": "2026-10-25", "read": 1, "where": "ch. 4", "text": "…"   // read & where optional
+    "notes": [{                         // Reading Journal entries / notes, newest shown first in #journal
+      "date": "2026-10-25",             // required
+      "read": 1,                        // optional read number
+      "page": 90,                       // optional page reached
+      "where": "ch. 4 / where in the story",  // optional
+      "text": "…",                      // free-form thoughts ("" allowed if working/notWorking given)
+      "working": ["…"],                 // optional: what's working
+      "notWorking": ["…"]               // optional: what's not working
     }]
   }],
   "log": [{
@@ -132,6 +154,10 @@ cd /workspace/reading-quest && git add -A && git commit -m "Update reading log" 
 Several entries on one date are summed. Book progress = sum of that book's `pages` and `chapters` in the log **for the current read** (entries with that `read` number, or, without one, dated on/after the read started); current chapter = chapters done + 1.
 
 **Backward compatibility**: a book without `reads` is upgraded on load (by both `engine.js` and `log.py`) to one read built from its `started`/`finished`; missing `notes` becomes `[]`. Old files keep working unchanged.
+
+## Reading Journal tab
+
+`…/reading-quest/#journal`. Intro strip (entries, journal streak, days journaled, XP per entry), a book filter, then one card per entry, newest first: date, book, page reached with a progress bar, where you are in the story, thoughts, and side-by-side **What's working** / **What's not** lists (stacked on phones). Journal streak = consecutive days with at least one entry (today doesn't break it until it's over). Empty state shows prompts.
 
 ## Reviews & Reflections tab
 
@@ -157,11 +183,11 @@ Every book shows a cover in the Now reading card, Next up and the bookshelf (fin
 
 ## Rules (all computed from the log)
 
-- **XP**: 1 per page, 15 per chapter, 1 per 2 minutes, +10 per day the goal is met, +200 per finished read (re-reads count), +50 per review, +50 more if its thoughts run 150+ words, +5 per journal note.
+- **XP**: 1 per page, 15 per chapter, 1 per 2 minutes, +10 per day the goal is met, +200 per finished read (re-reads count), +50 per review, +50 more if its thoughts run 150+ words, +5 per journal entry (`journal` or `note`).
 - **Levels**: Spine Cracker (0) → Page Turner (100) → Chapter Chaser (250) → Dog-Ear Devotee (450) → Margin Scribbler (700) → Lamp-Light Regular (1000) → Plot Hunter (1400) → Shelf Builder (1900) → Bookworm (2500) → Story Cartographer (3200) → Tome Tamer (4000) → Archivist (5000) → Lorekeeper (6200) → Bibliophile (7600) → Grand Librarian (9200) → Keeper of Ten Thousand Pages (11000) → Living Library (13500).
 - **Daily goal**: met when pages ≥ goal pages **or** minutes ≥ goal minutes. Goal weeks are 7-day blocks counted from the first log date (24 Oct 2026, so Sat–Fri). After a block with ≥ 5 met days the goal rises ~10% (rounded, at least +1), otherwise it holds. Cap 50 pages / 60 minutes.
 - **Streak**: consecutive days with any reading. Today doesn't break it until it's over. Every 7th consecutive day earns a 🧊 freeze (max 2 banked); a missed day auto-spends one and the streak survives.
-- **Badges**: First Chapter, Kindling (3-day), Steady Flame (7-day), Unbroken Moon (30-day), Level-Up Week, Century Week (100 pages Mon–Sun), Deep Dive (60 min/day), Halfway There, The End (first book), Shelf of Five, Night Owl (entry time 23:00–03:59), Early Bird (04:00–06:59), Saved by Ice, Year Complete, ✍️ First Review, 🎭 Critic (5 reviews), 🗒️ Margin Notes (first journal note), 🔁 Re-reader (start a second read of any book), 🔄 Changed My Mind (ratings of one book differ by ≥ 1.5★ between reads). Finished re-reads count toward The End, Shelf of Five, the book milestones and the yearly goal.
+- **Badges**: First Chapter, Kindling (3-day), Steady Flame (7-day), Unbroken Moon (30-day), Level-Up Week, Century Week (100 pages Mon–Sun), Deep Dive (60 min/day), Halfway There, The End (first book), Shelf of Five, Night Owl (entry time 23:00–03:59), Early Bird (04:00–06:59), Saved by Ice, Year Complete, ✍️ First Review, 🎭 Critic (5 reviews), 🗒️ Margin Notes (first journal entry), 📓 Dear Diary (journal 3 days in a row), 🔁 Re-reader (start a second read of any book), 🔄 Changed My Mind (ratings of one book differ by ≥ 1.5★ between reads). Finished re-reads count toward The End, Shelf of Five, the book milestones and the yearly goal.
 - **Quests**: next book milestone (1, 3, 5, 10, 15, 20, 25, 30, 40, 50, 75, 100) and the yearly goal with an even-pace marker.
 - **This week** card uses calendar weeks (Mon–Sun) and compares with last week.
 - **Quick log** on the page saves to `localStorage` only, marked *pending*; it never changes stats until it's added to `data/reading.json`.

@@ -212,11 +212,11 @@
     renderPending();
   }
 
-  // ---------- tabs (hash routing: #quest / #reviews) ----------
+  // ---------- tabs (hash routing: #quest / #journal / #reviews) ----------
   function setupTabs() {
     const show = () => {
-      const tab = location.hash === "#reviews" ? "reviews" : "quest";
-      $("questView").hidden = tab !== "quest"; $("reviewsView").hidden = tab !== "reviews";
+      const tab = ["#reviews", "#journal"].includes(location.hash) ? location.hash.slice(1) : "quest";
+      $("questView").hidden = tab !== "quest"; $("reviewsView").hidden = tab !== "reviews"; $("journalView").hidden = tab !== "journal";
       document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === tab));
     };
     window.addEventListener("hashchange", () => { show(); window.scrollTo({ top: 0 }); });
@@ -226,6 +226,6 @@
   // ---------- boot ----------
   fetch("data/reading.json", { cache: "no-store" })
     .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(data => { const S = compute(data); render(S); setupPending(S.today); window.ReviewsView.bind(S); setupTabs(); document.body.classList.add("ready"); })
+    .then(data => { const S = compute(data); render(S); setupPending(S.today); window.ReviewsView.bind(S); window.JournalView.bind(S); setupTabs(); document.body.classList.add("ready"); })
     .catch(err => { $("hello").textContent = "Couldn't load the reading log."; $("tagline").textContent = String(err); });
 })();
