@@ -48,6 +48,18 @@
             "The pacing feels a little dragged out."
           ],
           "read": 1
+        },
+        {
+          "date": "2026-10-26",
+          "page": 102,
+          "where": "Grace is told to build a prototype for breeding Astrophage; Tau Ceti is the one star Astrophage hasn't touched, and that's where he is",
+          "text": "The story is picking up and the plot has thickened. We now know Astrophage spreads from star to star but has left one star alone, and Ryland is in that star system. We also learn it's a one-way trip for him.",
+          "working": [
+            "Story picking up; plot thickening",
+            "The untouched-star mystery gives the mission real stakes",
+            "The one-way-trip reveal adds weight"
+          ],
+          "read": 1
         }
       ]
     },
@@ -113,6 +125,15 @@
       "chapters": 0,
       "minutes": 0,
       "note": "Up to p. 90: Grace works out how Astrophage reproduces, then is flown to a Chinese aircraft carrier to brief everyone; Project Hail Mary is discussed.",
+      "read": 1
+    },
+    {
+      "date": "2026-10-26",
+      "book": "project-hail-mary",
+      "pages": 10,
+      "chapters": 0,
+      "minutes": 0,
+      "note": "",
       "read": 1
     }
   ]
