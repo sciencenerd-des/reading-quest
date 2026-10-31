@@ -135,6 +135,16 @@
       "minutes": 0,
       "note": "Up to p. 102.",
       "read": 1
+    },
+    {
+      "date": "2026-11-01",
+      "book": "project-hail-mary",
+      "pages": 18,
+      "chapters": 2,
+      "minutes": 0,
+      "note": "",
+      "read": 1,
+      "time": "03:30"
     }
   ]
 }
