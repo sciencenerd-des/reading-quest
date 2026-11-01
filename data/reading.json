@@ -156,6 +156,16 @@
       "note": "",
       "read": 1,
       "time": "03:30"
+    },
+    {
+      "date": "2026-11-01",
+      "book": "project-hail-mary",
+      "pages": 16,
+      "chapters": 2,
+      "minutes": 0,
+      "note": "Finished ch 7, started ch 8; first contact made",
+      "read": 1,
+      "time": "22:45"
     }
   ]
 }
