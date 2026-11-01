@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 450" role="img" aria-labelledby="t">
+  <title id="t">A Wizard of Earthsea: original artwork, a small sailboat among dark islands at dusk, a staff glowing with mage-light as a shapeless shadow rises over the sea</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1a2b"/><stop offset=".5" stop-color="#1d3b4f"/><stop offset=".62" stop-color="#3f6d73"/><stop offset="1" stop-color="#081419"/></linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#18404a"/><stop offset="1" stop-color="#061317"/></linearGradient>
+    <radialGradient id="light" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff4cf"/><stop offset=".25" stop-color="#ffd27a" stop-opacity=".75"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+    <radialGradient id="shadow" cx=".5" cy=".6" r=".5"><stop offset="0" stop-color="#020407" stop-opacity=".95"/><stop offset="1" stop-color="#020407" stop-opacity="0"/></radialGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07060f" stop-opacity="0"/><stop offset=".45" stop-color="#07060f" stop-opacity=".86"/><stop offset="1" stop-color="#07060f"/></linearGradient>
+  </defs>
+  <rect width="300" height="450" fill="url(#bg)"/>
+  <g fill="#e8f4ff"><circle cx="139.8" cy="64.8" r="0.7" opacity="0.41"/><circle cx="198.8" cy="60.0" r="1.2" opacity="0.84"/><circle cx="34.3" cy="89.4" r="0.5" opacity="0.74"/><circle cx="58.8" cy="142.7" r="1.2" opacity="0.39"/><circle cx="77.7" cy="29.1" r="0.5" opacity="0.76"/><circle cx="117.9" cy="115.5" r="0.5" opacity="0.85"/><circle cx="68.6" cy="44.5" r="1.2" opacity="0.83"/><circle cx="225.2" cy="137.9" r="1.2" opacity="0.47"/><circle cx="235.4" cy="41.1" r="0.5" opacity="0.83"/><circle cx="27.1" cy="65.5" r="1.2" opacity="0.38"/><circle cx="77.3" cy="114.1" r="0.5" opacity="0.88"/><circle cx="13.1" cy="118.0" r="0.7" opacity="0.84"/><circle cx="68.0" cy="15.1" r="0.5" opacity="0.38"/><circle cx="265.3" cy="82.1" r="1.2" opacity="0.62"/><circle cx="66.7" cy="23.4" r="0.7" opacity="0.68"/><circle cx="37.8" cy="92.9" r="0.7" opacity="0.86"/><circle cx="210.6" cy="19.6" r="0.9" opacity="0.63"/><circle cx="179.4" cy="34.3" r="0.9" opacity="0.74"/><circle cx="170.8" cy="18.7" r="1.2" opacity="0.87"/><circle cx="77.4" cy="97.1" r="0.5" opacity="0.74"/><circle cx="245.4" cy="85.0" r="0.5" opacity="0.82"/><circle cx="42.4" cy="133.9" r="0.9" opacity="0.57"/><circle cx="123.0" cy="148.1" r="0.5" opacity="0.53"/><circle cx="179.7" cy="14.1" r="0.5" opacity="0.43"/><circle cx="134.5" cy="58.2" r="0.5" opacity="0.48"/><circle cx="90.6" cy="84.4" r="0.5" opacity="0.32"/><circle cx="227.5" cy="123.8" r="1.2" opacity="0.51"/><circle cx="226.7" cy="91.0" r="0.5" opacity="0.56"/><circle cx="75.7" cy="145.1" r="1.2" opacity="0.61"/><circle cx="275.8" cy="90.2" r="0.7" opacity="0.70"/><circle cx="59.2" cy="128.7" r="0.9" opacity="0.32"/><circle cx="271.3" cy="124.1" r="0.9" opacity="0.87"/><circle cx="284.2" cy="96.5" r="0.5" opacity="0.33"/><circle cx="136.3" cy="121.0" r="0.9" opacity="0.67"/><circle cx="278.7" cy="62.2" r="0.7" opacity="0.59"/><circle cx="88.7" cy="144.8" r="0.9" opacity="0.72"/><circle cx="30.1" cy="75.4" r="1.2" opacity="0.65"/><circle cx="233.6" cy="104.2" r="0.9" opacity="0.76"/><circle cx="255.0" cy="81.2" r="0.5" opacity="0.85"/><circle cx="88.4" cy="31.5" r="0.5" opacity="0.40"/><circle cx="229.9" cy="130.8" r="0.7" opacity="0.41"/><circle cx="138.0" cy="90.1" r="1.2" opacity="0.35"/><circle cx="163.4" cy="94.6" r="0.9" opacity="0.62"/><circle cx="271.8" cy="17.9" r="1.2" opacity="0.63"/><circle cx="156.5" cy="87.0" r="0.5" opacity="0.83"/></g>
+  <ellipse cx="200" cy="170" rx="80" ry="70" fill="url(#shadow)"/>
+  <path d="M150 230 Q160 150 196 118 Q206 104 214 116 Q240 150 262 232 Z" fill="#03070b" opacity=".75"/>
+  <circle cx="199" cy="128" r="2" fill="#7fa9b5" opacity=".6"/><circle cx="211" cy="128" r="2" fill="#7fa9b5" opacity=".6"/>
+  <g fill="#0c1c22"><path d="M0 232 Q20 200 46 210 Q66 186 92 214 Q104 226 120 232 Z"/><path d="M228 232 Q250 214 270 220 Q286 206 300 214 L300 232 Z"/><path d="M128 232 Q140 222 156 226 Q166 230 172 232 Z"/></g>
+  <rect x="0" y="232" width="300" height="218" fill="url(#sea)"/>
+  <g stroke="#bfe3e6" stroke-opacity=".22" stroke-width="1" fill="none"><path d="M20 250 q8 -3 16 0 t16 0"/><path d="M200 256 q8 -3 16 0 t16 0"/><path d="M90 270 q8 -3 16 0 t16 0"/><path d="M240 286 q8 -3 16 0 t16 0"/><path d="M30 300 q8 -3 16 0 t16 0"/><path d="M150 312 q8 -3 16 0 t16 0"/><path d="M260 322 q8 -3 16 0 t16 0"/><path d="M60 326 q8 -3 16 0 t16 0"/></g>
+  <path d="M96 296 L160 296 Q154 310 140 312 L112 312 Q100 308 96 296 Z" fill="#05090c"/>
+  <rect x="125" y="226" width="2.4" height="70" fill="#05090c"/>
+  <path d="M128 230 L158 290 L128 290 Z" fill="#c9b892" opacity=".85"/>
+  <path d="M109 296 L111 274 Q114 266 118 274 L120 296 Z" fill="#05090c"/><circle cx="114.5" cy="268" r="4" fill="#05090c"/>
+  <line x1="104" y1="300" x2="102" y2="246" stroke="#05090c" stroke-width="2"/>
+  <circle cx="102" cy="244" r="26" fill="url(#light)"/><circle cx="102" cy="244" r="2.5" fill="#fffaf0"/>
+  <path d="M80 312 Q102 330 124 312" fill="none" stroke="#ffd27a" stroke-opacity=".25" stroke-width="2"/>
+  <rect y="330" width="300" height="120" fill="url(#fade)"/>
+  <rect x="10" y="10" width="280" height="430" rx="4" fill="none" stroke="#f2d7a0" stroke-opacity=".32"/>
+  <text x="150" y="373" text-anchor="middle" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-weight="700" font-size="24" letter-spacing="4" fill="#f4ead7">A WIZARD OF</text>
+  <text x="150" y="405" text-anchor="middle" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-weight="700" font-size="34" letter-spacing="5" fill="#f4ead7">EARTHSEA</text>
+  <text x="150" y="428" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="4" fill="#ffd27a">URSULA K. LE GUIN</text>
+</svg>

@@ -167,7 +167,7 @@ Several entries on one date are summed. Book progress = sum of that book's `page
 
 Every book shows a cover in the Now reading card, Next up and the bookshelf (finished books; the current book holds a faded "reserved" slot until then).
 
-- **Books with art**: `cover` points at a file in `assets/covers/`. Current art: `project-hail-mary.svg`, `dark-matter.svg`, `piranesi.svg`, `out.svg`. All are original stylised artwork (no publisher covers, traced images or stock photos).
+- **Books with art**: `cover` points at a file in `assets/covers/`. Current art: `project-hail-mary.svg`, `dark-matter.svg`, `piranesi.svg`, `out.svg`, `doppelganger-a-trip-into-the-mirror-world.svg`, `the-elegant-universe.svg`, `batman-the-dark-knight-returns.svg`, `a-wizard-of-earthsea.svg`, `thinking-fast-and-slow.svg`. All are original stylised artwork (no publisher covers, traced images or stock photos).
 - **Books without art**: `engine.js → fallbackCover()` generates a typographic SVG (title, author, hue derived from the title). If a `cover` file fails to load, the page swaps in the generated one automatically.
 
 ### Adding art for a new book
