@@ -131,6 +131,56 @@
       "finished": null,
       "reads": [],
       "notes": []
+    },
+    {
+      "id": "doppelganger-a-trip-into-the-mirror-world",
+      "title": "Doppelganger: A Trip into the Mirror World",
+      "author": "Naomi Klein",
+      "status": "next",
+      "started": null,
+      "finished": null,
+      "reads": [],
+      "notes": []
+    },
+    {
+      "id": "the-elegant-universe",
+      "title": "The Elegant Universe",
+      "author": "Brian Greene",
+      "status": "next",
+      "started": null,
+      "finished": null,
+      "reads": [],
+      "notes": []
+    },
+    {
+      "id": "batman-the-dark-knight-returns",
+      "title": "Batman: The Dark Knight Returns",
+      "author": "Frank Miller",
+      "status": "next",
+      "started": null,
+      "finished": null,
+      "reads": [],
+      "notes": []
+    },
+    {
+      "id": "a-wizard-of-earthsea",
+      "title": "A Wizard of Earthsea",
+      "author": "Ursula K. Le Guin",
+      "status": "next",
+      "started": null,
+      "finished": null,
+      "reads": [],
+      "notes": []
+    },
+    {
+      "id": "thinking-fast-and-slow",
+      "title": "Thinking, Fast and Slow",
+      "author": "Daniel Kahneman",
+      "status": "next",
+      "started": null,
+      "finished": null,
+      "reads": [],
+      "notes": []
     }
   ],
   "log": [
