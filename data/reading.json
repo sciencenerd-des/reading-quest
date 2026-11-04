@@ -94,6 +94,19 @@
             "First contact"
           ],
           "read": 1
+        },
+        {
+          "date": "2026-11-04",
+          "page": 184,
+          "where": "End of ch. 10: Grace and Rocky make contact",
+          "text": "The pacing is perfect and the plot ideas are genuinely new; I haven't read a sci-fi novel like this before. It reads like an action thriller but has the soul of a Miyazaki film, and it keeps me hooked the whole time. I hope it keeps its innocent beauty and simplicity right to the end.",
+          "working": [
+            "Perfect pacing",
+            "Fresh, original plot",
+            "Thriller energy with a Miyazaki soul",
+            "First-contact communication"
+          ],
+          "read": 1
         }
       ]
     },
@@ -254,6 +267,16 @@
       "note": "Finished ch. 8: Grace talks to the other ship, learns they're from 40 Eridani; they invite him to meet.",
       "read": 1,
       "time": "18:40"
+    },
+    {
+      "date": "2026-11-04",
+      "book": "project-hail-mary",
+      "pages": 48,
+      "chapters": 2,
+      "minutes": 0,
+      "note": "Ch. 9-10: Grace and Rocky build an airlock tunnel, work out how to talk, and swap clocks.",
+      "read": 1,
+      "time": "21:50"
     }
   ]
 }
