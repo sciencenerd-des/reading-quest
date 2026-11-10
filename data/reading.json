@@ -21,16 +21,35 @@
       "totalChapters": 30,
       "totalPages": 496,
       "edition": "Ballantine hardcover, 2021 (30 chapters + epilogue, 496 pp)",
-      "status": "reading",
+      "status": "finished",
       "started": "2026-10-24",
-      "finished": null,
+      "finished": "2026-11-11",
       "cover": "assets/covers/project-hail-mary.svg",
       "reads": [
         {
           "n": 1,
           "started": "2026-10-24",
-          "finished": null,
-          "review": null
+          "finished": "2026-11-11",
+          "review": {
+            "verdict": "Emotional, thrilling, epic. I love this book.",
+            "thoughts": "Great book. The final chapters are amazing. Ryland becoming a coward to be a brave man, abandoning returning to Earth to save Rocky, is my favourite bit. It is emotional, thrilling, epic.",
+            "character": "Rocky",
+            "reread": "yes",
+            "moods": [
+              "moved",
+              "thrilled",
+              "epic"
+            ],
+            "moments": [
+              {
+                "text": "Ryland gives up returning to Earth to save Rocky",
+                "where": "final chapters"
+              }
+            ],
+            "date": "2026-11-11",
+            "quotes": [],
+            "discussion": []
+          }
         }
       ],
       "notes": [
@@ -164,6 +183,17 @@
           "working": [
             "Infuses excitement into the mundane",
             "Thrilling turn in the plot"
+          ],
+          "read": 1
+        },
+        {
+          "date": "2026-11-11",
+          "page": 496,
+          "where": "The ending (finished)",
+          "text": "Completed the book just now. Great book. The final chapters are amazing. Ryland becoming a coward to be a brave man, abandoning returning to Earth to save Rocky, is my favourite bit. It is emotional, thrilling, epic. I love this book.",
+          "working": [
+            "Ryland choosing to save Rocky over going home",
+            "Emotional, thrilling, epic final chapters"
           ],
           "read": 1
         }
@@ -385,6 +415,16 @@
       "minutes": 0,
       "note": "",
       "read": 1
+    },
+    {
+      "date": "2026-11-11",
+      "book": "project-hail-mary",
+      "pages": 84,
+      "chapters": 5,
+      "minutes": 0,
+      "note": "Finished the book. The final chapters are amazing.",
+      "read": 1,
+      "time": "01:30"
     }
   ]
 }
