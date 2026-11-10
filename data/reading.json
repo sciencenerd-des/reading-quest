@@ -32,7 +32,7 @@
           "finished": "2026-11-11",
           "review": {
             "verdict": "Emotional, thrilling, epic. I love this book.",
-            "thoughts": "Great book. The final chapters are amazing. Ryland becoming a coward to be a brave man, abandoning returning to Earth to save Rocky, is my favourite bit. It is emotional, thrilling, epic.",
+            "thoughts": "Great book. The final chapters are amazing. Ryland becoming a coward to be a brave man, abandoning returning to Earth to save Rocky, is my favourite bit. It is emotional, thrilling, epic. I'm deducting half a point because the Earth timeline felt a little boring and dragged on more than it should have. The heart and meat of the book lies in the spaceship adventure; the Earth timeline is not as entertaining or interesting as the spaceship / Tau Ceti timeline.",
             "character": "Rocky",
             "reread": "yes",
             "moods": [
@@ -48,7 +48,10 @@
             ],
             "date": "2026-11-11",
             "quotes": [],
-            "discussion": []
+            "discussion": [
+              "Earth timeline: felt a little boring and dragged on more than it should have; the heart and meat of the book is the spaceship / Tau Ceti adventure, which is far more entertaining. Half a star off for that."
+            ],
+            "rating": 4.5
           }
         }
       ],
@@ -196,6 +199,19 @@
             "Emotional, thrilling, epic final chapters"
           ],
           "read": 1
+        },
+        {
+          "date": "2026-11-11",
+          "page": 496,
+          "where": "Rating the book",
+          "text": "4.5 stars. Deducting half a point because the Earth timeline felt a little boring and dragged on more than it should have. The heart and meat of the book is the spaceship adventure.",
+          "working": [
+            "Spaceship / Tau Ceti timeline"
+          ],
+          "notWorking": [
+            "Earth timeline dragged on"
+          ],
+          "read": 1
         }
       ]
     },
@@ -204,13 +220,20 @@
       "title": "Dark Matter",
       "author": "Blake Crouch",
       "totalChapters": 15,
-      "totalPages": 416,
+      "totalPages": 342,
       "edition": "Pan paperback, 2017 (ISBN 9781447297581): 15 chapters, 416 pp",
       "cover": "assets/covers/dark-matter.svg",
-      "status": "next",
-      "started": null,
+      "status": "reading",
+      "started": "2026-11-11",
       "finished": null,
-      "reads": [],
+      "reads": [
+        {
+          "n": 1,
+          "started": "2026-11-11",
+          "finished": null,
+          "review": null
+        }
+      ],
       "notes": []
     },
     {
@@ -271,11 +294,21 @@
       "title": "Batman: The Dark Knight Returns",
       "author": "Frank Miller",
       "cover": "assets/covers/batman-the-dark-knight-returns.svg",
-      "status": "next",
-      "started": null,
+      "status": "reading",
+      "started": "2026-11-11",
       "finished": null,
-      "reads": [],
-      "notes": []
+      "reads": [
+        {
+          "n": 1,
+          "started": "2026-11-11",
+          "finished": null,
+          "review": null
+        }
+      ],
+      "notes": [],
+      "totalPages": 224,
+      "totalChapters": 4,
+      "chapterLabel": "book"
     },
     {
       "id": "a-wizard-of-earthsea",
